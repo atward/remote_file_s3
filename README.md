@@ -1,4 +1,4 @@
-# Chef remote_s3_file Cookbook
+# Chef remote_file_s3 Cookbook
 
 This is based on Lamont Granquis's sk_s3_file resource: https://github.com/lamont-cookbooks/sk_s3_file
 Which in turn is based on Brandon Adams' s3_file resource: https://github.com/adamsb6/s3_file
