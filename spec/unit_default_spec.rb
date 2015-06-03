@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "unit::default" do
   let(:runner) do
     ChefSpec::Runner.new(
-      step_into: 'sk_s3_file',
+      step_into: 'remote_file_s3',
       platform: 'ubuntu',
       version: "13.04",
     )
@@ -20,8 +20,8 @@ describe "unit::default" do
 
   let(:url) { "https://mybucket.s3.amazonaws.com/something/foo.txt" }
 
-  it "calls sk_s3_file" do
-    expect(test).to create_sk_s3_file("/tmp/foo.txt")
+  it "calls remote_file_s3" do
+    expect(test).to create_remote_file_s3("/tmp/foo.txt")
   end
 
   it "calls remote_file" do
@@ -41,7 +41,7 @@ describe "unit::default" do
   end
 
   context "when overridding mode to be octal" do
-    let(:test) { runner.converge(described_recipe) { runner.find_resource(:sk_s3_file, "/tmp/foo.txt").mode(00644) } }
+    let(:test) { runner.converge(described_recipe) { runner.find_resource(:remote_file_s3, "/tmp/foo.txt").mode(00644) } }
     it "passes octal to remote_file" do
       expect(test).to create_remote_file("/tmp/foo.txt").with(mode: 00644)
     end
@@ -66,21 +66,21 @@ describe "unit::default" do
     end
 
     context "when overriding the date header" do
-      let(:test) { runner.converge(described_recipe) { runner.find_resource(:sk_s3_file, "/tmp/foo.txt").headers( "date" => "foo ") } }
+      let(:test) { runner.converge(described_recipe) { runner.find_resource(:remote_file_s3, "/tmp/foo.txt").headers( "date" => "foo ") } }
       it "passes the date header to remote_file" do
         expect(test).to create_remote_file("/tmp/foo.txt").with(headers: fake_headers.merge( "date" => "foo "))
       end
     end
 
     context "when overriding the authorization header" do
-      let(:test) { runner.converge(described_recipe) { runner.find_resource(:sk_s3_file, "/tmp/foo.txt").headers( "authorization" => "foo ") } }
+      let(:test) { runner.converge(described_recipe) { runner.find_resource(:remote_file_s3, "/tmp/foo.txt").headers( "authorization" => "foo ") } }
       it "passes the authorization header to remote_file" do
         expect(test).to create_remote_file("/tmp/foo.txt").with(headers: fake_headers.merge( "authorization" => "foo "))
       end
     end
 
     context "when adding headers" do
-      let(:test) { runner.converge(described_recipe) { runner.find_resource(:sk_s3_file, "/tmp/foo.txt").headers( "x-foobar" => "foo ") } }
+      let(:test) { runner.converge(described_recipe) { runner.find_resource(:remote_file_s3, "/tmp/foo.txt").headers( "x-foobar" => "foo ") } }
       it "merges the header with the computed headers" do
         expect(test).to create_remote_file("/tmp/foo.txt").with(headers: fake_headers.merge( "x-foobar" => "foo "))
       end

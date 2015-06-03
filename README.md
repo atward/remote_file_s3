@@ -1,8 +1,7 @@
-# Chef sk_s3_file Cookbook
+# Chef remote_s3_file Cookbook
 
-[![Build Status](https://secure.travis-ci.org/lamont-granquist/sk_s3_file.png?branch=master)](http://travis-ci.org/lamont-granquist/sk_s3_file)
-
-This is based on Brandon Adams' s3_file resource: https://github.com/adamsb6/s3_file
+This is based on Lamont Granquis's sk_s3_file resource: https://github.com/lamont-cookbooks/sk_s3_file
+Which in turn is based on Brandon Adams' s3_file resource: https://github.com/adamsb6/s3_file
 
 ## Description
 
@@ -27,7 +26,7 @@ None
 
 ## Resources/Providers
 
-### sk_s3_file
+### remote_file_s3
 
 #### Example
 
@@ -37,7 +36,7 @@ a best practice for Hosted Chef).
 ``` ruby
 creds = Chef::EncryptedDataBagItem.load("encrypted", "creds")
 
-sk_s3_file "/tmp/somefile" do
+remote_file_s3 "/tmp/somefile" do
   remote_path "/path/in/s3/to/somefile"
   bucket "mybucket"
   aws_access_key_id creds["ec2_access_key"]
@@ -46,6 +45,17 @@ sk_s3_file "/tmp/somefile" do
   group "root"
   mode "0644"
   action :create
+end
+```
+
+Simpler example using instance profile credentials
+
+``` ruby
+
+remote_file_s3 "/tmp/somefile" do
+  remote_path "/path/in/s3/to/somefile"
+  bucket "mybucket"
+  action :create_if_missing
 end
 ```
 
@@ -89,23 +99,20 @@ None
 
 ## Usage
 
-Put `depends sk_s3_file` in your metadata.rb to gain access to the LWRP in your code.
+Put `depends remote_file_s3` in your metadata.rb to gain access to the LWRP in your code.
 
 ## Contributing
 
 Just open a PR or Issue on GitHub.
 
-DO NOT Submit PRs for Ruby 1.8.7 support.
-DO NOT Submit PRs for Chef < 11.6.0 support.
-
-If you want either of those, make a fork and maintain it yourself.
-
 ## License and Author
 
+- Author:: Adam Ward
 - Author:: Lamont Granquist (<lamont@scriptkiddie.org>)
 - Author:: Brandon Adams and other contributors
 
 ```text
+Copyright:: 2015 Adam Ward
 Copyright:: 2014 Lamont Granquist
 Copyright:: 2012-2013 Brandon Adams and other contributors
 
